@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load custom_filter %}
+
+<div class="container">
+    <div class="border rounded p-4 m-4">
+        <p class="display-4 pl-4 ml-4"><img src="https://img.icons8.com/emoji/48/000000/shopping-cart-emoji.png"/> Your Cart</p>
+        <hr>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>S.no</th>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>quantity</th>
+                    <th> Unit price</th>
+                    <th>price</th>
+                    <th>Total</th>
+                   
+                  
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart %}
+                    {% with product=item.product %}
+                <tr>
+                    <td scope="row">{{forloop.counter}}</td>
+                    <a href="{{ product.get_absolute_url }}">
+                    <td><img src="{{ product.image.url }}" class="rounded-circle" style="width:80px; height: 80px;"></td>
+                    <td>{{product.name}}</td>
+                    <td><form action="{% url 'cart:cart_add' product.id %}" method="POST">
+                        {% csrf_token %}
+                        {{ item.update_quantity_form.quantity }}
+                        {{ item.update_quantity_form.update }}
+                        <input type="submit" value="Update">
+                       
+                    </form></td>
+                    <td>{{item.price|currency}}</td>
+                    <td>{{item.total_price|currency}}</td>
+                   
+                    <td><a href="{% url 'cart:cart_remove' product.id %}" ><img src="https://img.icons8.com/emoji/48/000000/cross-mark-emoji.png" style="height: 20px; width:20px;"/></a></td>
+                  </tr>
+                  {% endwith %}
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="5">Total :-</th>
+                    <th>{{cart.get_total_price|currency}}</th>
+                </tr>
+            </tfoot>
+        </table>  
+        <hr>
+        <div class="m-3 p-3">
+            <a href="{% url 'orders:order_create' %}" class="btn btn-primary" >Check Out</a>
+            <a href="{% url 'shop:product_list' %}" class="btn btn-primary" >Continue Shopping</a>
+
+        </div>
+    </div>
+    
+    </div>
+    
+    
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html'%}
+{% block content %}
+{% load custom_filter %}
+<div class="card mb-3" style="margin-top: 50px;">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="...">
+      </div>
+      <div class="col-md-8" >
+        <div class="card-body"> 
+          <h1 class="card-title">{{ product.name }}</h1>
+          <p class="card-text">{{ product.description|linebreaks }}</p>
+          <p style=" color:#FE980F;font-size: 26px; font-weight: bold;padding-top: 20px;" class="card-text">{{ product.price|currency }}</p>
+          
+          <form action="{% url 'cart:cart_add' product.id %}" method="POST">
+            {{ cart_product_form }}
+            {% csrf_token %}
+        <br><input type="submit" class="btn btn-default btn-lg"  value="Add to Cart" style="background: #1a9b09; color: #FFFFFF; font-size: 15px; margin-top: 50px; ">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
